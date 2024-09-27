@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+#
+# debug.lib
+#
+# Shell library to provide DEBUG functionality to Shell Scripts.
+#
+# To use these functionalities source this library in your shell scripts.
+# See help function for more info about the functions and variables provided.
+#
+#
+
+_LINE="********************************************************************************"
+_LIB=$(basename ${0})
+_LIB_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+## set debug and/or tracing globally
+declare -x _DEBUG=false          ## simple debug output
+declare -x _TRACE=false          ## bash trace with set -x
+declare -x _TRACE_DEBUG=false    ## bash trace with set -x and enables debug mode
+
+## global read only variables
+declare -x -r _TRACE_ON="-x"     ## activate bash trace option
+declare -x -r _TRACE_OFF="+x"    ## deactivate bash trace option
+
+declare -x _TRACE_OPT=${_TRACE_OFF}  ## bash option for subscripts (default: off)
+declare -x _CALL_OPT=""              ## bash call option to pass to subscripts that also use debug
+
+_LOG=true                            ## log output of this library to console (default: on)
+_Q=""                                ## quite output in getopt
+
+function _console_log() {
+
+}
+
+function _parse_debug_options() {
+    [ ${#} -gt 0 ] {
+        ## processing quite output for getopt (must be first param)
+        for o in $(${@}); do
+            [ ${o} == "-Q" ] || [ ${o} == "--quite-output" ] && { _LOG=false; _Q="${o}"; }
+        done
+        ## processing script options for debug or tracing to override internal settings using getopt
+        ## getopt -help
+        ## Usage:
+        ##  getopt <optstring> <parameters>
+        ##  getopt [options] [--] <optstring> <parameters>
+        ##  getopt [options] -o|--options <optstring> [options] [--] <parameters>
+        ## Parse command options.
+        ## Options:
+        ##  -a, --alternative             allow long options starting with single -
+        ##  -l, --longoptions <longopts>  the long options to be recognized
+        ##  -n, --name <progname>         the name under which errors are reported
+        ##  -o, --options <optstring>     the short options to be recognized
+        ##  -q, --quiet                   disable error reporting by getopt(3)
+        ##  -Q, --quiet-output            no normal output
+        ##  -s, --shell <shell>           set quoting conventions to those of <shell>
+        ##  -T, --test                    test for getopt(1) version
+        ##  -u, --unquoted                do not quote the output
+        ##  -h, --help                    display this help
+        ##  -V, --version                 display version
+        # For more details see getopt(1).
+
+        ## Options are processed with -q to prevent error reporting,
+        ## in case more options are present in calling script that are not handled in here.
+        OPTS=$(getopt ${_Q} --quite --options dtx --longoptions debug,trace,trace_debug -- "$@")
+        ## Note the quotes around "${OPTS}": they are essential!
+        ## Options are mutually exclusive, so we break on each hit in case statement
+        eval set -- "${OPTS}"
+        while true; do
+            case "${1}" in
+            -d | --debug )
+                echo "$(date) - ${_LINE}"
+                echo "$(date) - ${_LIB}: Debug Option was set by option \"${1}\". Setting Debug to: TRUE";
+                _DEBUG=true;
+                _CALL_OPT="${1}"
+                shift; break
+            ;;
+            -t | --trace)
+                echo "$(date) - ${_LINE}"
+                echo "$(date) - ${_LIB}: Trace Option was set by option \"${1}\". Setting Trace and Debug to: TRUE";
+                _TRACE=true;
+                _BASH_OPT="-x"
+                shift; break
+            ;;
+            -x | --trace_debug)
+                echo "$(date) - ${_LINE}"
+                echo "$(date) - ${_LIB}: Trace Option was set by option \"${1}\". Setting Trace and Debug to: TRUE";
+                _TRACE=true;
+                _BASH_OPT="-x"
+                shift; break
+            ;;
+            -- ) shift; break
+            ;;
+            * ) break
+            ;;
+            esac
+        done
+    } || {
+        return 0;
+        echo "no Params to DEBUG"
+    }
+}
+
+if ${_TRACE}; then
+    _DEBUG=true;
+    _BASH_OPT="-x"
+fi
+
+## set bash trace option [trace -x | notrace +x]
+set ${_BASH_OPT}
+
+## logging
+_log() {
+    echo "$(date): ${1}";
+}
+
+## debugging output
+_debug() {
+    if ${_DEBUG}; then
+        _log "${1}"
+    fi
+}
+
+exit $?
