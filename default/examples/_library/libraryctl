@@ -29,7 +29,7 @@
 # See help function for more info about the use and appliance of this file.
 #
 # History:
-#    2024-09-23 - sobermeyer: created.
+#    2024-09-22 - sobermeyer: created.
 #
 #
 
@@ -179,12 +179,12 @@ COMMANDS
                     about the run context of the library, like configuration file used, etc.
 
 AUTHOR
-    Stefan Obermeyer ⟨sobermeyer@kzvnr.de⟩
+    Stefan Obermeyer ⟨s.obermeyer@t-online.de⟩
 
 AVAILABILITY
     The ${_THIS_FILE} command is part of the lib package and is available from
     Oracle Scripts GIT repository
-    ⟨https://gitlab.kzvnr.de/kzvdba/oracle/-/tree/stage/scripts/lib?ref_type=heads⟩.
+    ⟨https://github.com/shlib⟩.
 
 LAST UPDATE
     September 2024
