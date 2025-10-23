@@ -2,12 +2,13 @@
 Shell Libraries to make your scripting life easier
 
 
-## help file for shlib.sh
+## Usage Help
 
 Name: shlib.sh
 
-Description: Library Script to provide common variables
-             and functions for shell scripts (to be sourced from other scripts).
+Description: Library Script to provide common variables and functions for shell scripts 
+             This script is to be sourced from other scripts. 
+             The easiest way is to link it to a directory in common path, like /usr/local/bin 
 
 Synopsis:
 
@@ -25,9 +26,10 @@ Options:
 
 Extensions:
 
-    Variables set in shlib can be overwritten by calling script. This should be done
-    before sourcing shlib. Below are all Variables set by shlib that can be overwritten.
-    ======================================================================================
+    Variables set in shlib can be overwritten by calling script. 
+    This should be done before sourcing shlib. 
+    Below are all Variables set by shlib that can be overwritten by the scripts sourcing shlib.
+    
     ### Basic variables to overwrite:
     _ME=$(basename ${0})
     _JUST_ME="${_ME%.*}"
@@ -47,16 +49,18 @@ Extensions:
     _TRACE="false"
     _HELP="false"
 
-    ### Arrays to overwrite:
+    ### Option Arrays to overwrite:
     debug_opts=("-D" "--Debug")
     trace_opts=("-T" "--Trace")
     help_opts=("-H" "--Help")
+
     ### Loglevel Array:
     loglevels=("INFO" "WARN" "ERROR")
+    
     ### Status Array:
     status=("ok" "failed")
 
-    ## Values and Steps
+    ### Values and Steps
     _VAL=0
     _INCR_BY=1
     _ST=1
