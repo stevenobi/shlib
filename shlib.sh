@@ -152,6 +152,7 @@ _help () {
 ## process option arguments
 parse_opts() {
     local _ARG_LEN=${#1}
+    local _P="##########"
     [ ${_ARG_LEN} -gt 0 ] && {
         local _ARGS=-1
         while [[ ${_ARGS} -le ${_ARG_LEN} ]]; do
@@ -166,14 +167,14 @@ parse_opts() {
                 ;;
             "${trace_opts[0]}"|"${trace_opts[1]}")
                 _TRACE="true"
-                _date && printf " ########## TRACE: Trace Mode active: ${_TRACE} ##########\n\n" | tee -a ${_DEBUG_FILE}
+                _date && printf " ${_P} TRACE: Trace Mode active: ${_TRACE} ${_P}\n\n" | tee -a ${_DEBUG_FILE}
                 set -x
                 let _ARGS+=1
                 shift;
                 ;;
             "${debug_opts[0]}" | "${debug_opts[1]}" )
                 _DEBUG="true"
-                printf "\n$(date +%Y-%m-%d\ %H:%M:%S) ########## DEBUG: Debug Mode active: ${_DEBUG} ##########\n\n" | tee -a ${_DEBUG_FILE}
+                _date && printf " ${_P} DEBUG: Debug Mode active: ${_DEBUG} ${_P}\n\n" | tee -a ${_DEBUG_FILE}
                 let _ARGS+=1
                 shift;
                 ;;
