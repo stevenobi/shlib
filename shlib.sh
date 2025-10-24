@@ -252,7 +252,7 @@ _logmsg () {
     local _LEN=0
     [ -z ${2} ] && {
         # regular logging
-        printf "${1//\"/}\n"
+        printf " ${1//\"/}\n"
     } || {
         # severity code for log level was passed
         if [[ ${2} =~ ^[0-9]+$ ]] && [[ ${2} -le ${_LOGLEV_LEN} ]]; then
